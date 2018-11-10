@@ -35,9 +35,9 @@
         <%= @weather['main']['temp'] %>&deg;
       </div>
       <div class="hilo-temp">
-        <%= @forecast['list'].first['temp']['min'].round %>&deg;
+        <%= @forecast['list'].first['main']['temp_min'].round %>&deg;
         /
-        <%= @forecast['list'].first['temp']['max'].round %>&deg;
+        <%= @forecast['list'].first['main']['temp_max'].round %>&deg;
       </div>
     </div>
     <div class="col-md-4 centered">
