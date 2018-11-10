@@ -1,29 +1,75 @@
 require 'bundler/setup'
 Bundler.require
 
+require 'dotenv/load'
+require 'logger'
 require 'open-uri'
 require 'erb'
 require 'time'
 require 'json'
 
-LAT = 36.008111
-LON = -95.942436
+logger = Logger.new(STDOUT)
+
+HOME_LAT = ENV["HOME_LAT"]
+HOME_LON = ENV["HOME_LON"]
+HOME_ID = ENV["HOME_ID"]
+OPEN_WEATHER_API_KEY = ENV["OPEN_WEATHER_API_KEY"]
+
 UNITS = 'imperial'
 
+def generateBaseRequest(baseUrl)
+    if HOME_ID
+        return "#{baseUrl}?id=#{HOME_ID}"
+    else
+        return "#{baseUrl}?lat=#{HOME_LAT}&lon=#{HOME_LON}"
+    end
+end
+
+def generateAPICall(type)
+    baseUrl = "https://api.openweathermap.org/data/2.5"
+
+    if type == 'weather'
+        baseRequest = generateBaseRequest("#{baseUrl}/weather")
+        baseRequest = "#{baseRequest}&units=#{UNITS}"
+        return "#{baseRequest}&appid=#{OPEN_WEATHER_API_KEY}"
+
+    elsif type == 'forecast'
+        now = Time.now.to_i + 86400 # Epoch Time - 24 hours from now
+        baseRequest = generateBaseRequest("#{baseUrl}/forecast")
+        baseRequest = "#{baseRequest}&units=#{UNITS}"
+        return "#{baseRequest}&appid=#{OPEN_WEATHER_API_KEY}&date=#{now}"
+    end
+end
+
+logger.info('Server setting up')
+
 get '/' do
-  @now = Time.now
+  weatherRequest = generateAPICall('weather')
+  forecastRequest = generateAPICall('forecast')
+
+  logger.debug "Weather Request API: #{weatherRequest}"
+  logger.debug "Forecast Request API: #{forecastRequest}"
+
   tries = 0
+
   begin
     tries += 1
-    weather_json = open("http://api.openweathermap.org/data/2.5/weather?lat=#{LAT}&lon=#{LON}&units=#{UNITS}").read
-    forecast_json = open("http://api.openweathermap.org/data/2.5/forecast/daily?lat=#{LAT}&lon=#{LON}&cnt=1&mode=json&units=#{UNITS}").read
-  rescue
+    logger.info('Requesting weather data now')
+    weather_json = open(weatherRequest).read
+    forecast_json = open(forecastRequest).read
+  rescue => e
+    logger.warn('Issue with attempting to get weather data')
+    logger.warn(e)
+
+    logger.warn('Retring now')
     # sometimes the api returns bad data :-/
-    sleep 5
-    retry unless tries > 60 # 5 minutes
+    sleep 60 # Sleep for 1 minute before trying again
+    retry unless tries > 5 # retried at least 5 times
   end
+
   @weather = JSON.parse(weather_json)
   @forecast = JSON.parse(forecast_json)
+  logger.info(@forecast['list'].first['main'])
   @sunrise = Time.at(@weather['sys']['sunrise'])
   @sunset = Time.at(@weather['sys']['sunset'])
   erb :home

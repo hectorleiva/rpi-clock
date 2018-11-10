@@ -9,32 +9,48 @@ I needed a clock in my office and had a spare (cheap) flat-screen TV and a raspb
 It shows the current time, weather conditions (via Erik Flower's beautiful [weather icons](https://erikflowers.github.io/weather-icons/)),
 current temperature (using the [OpenWeatherMap API](http://openweathermap.org/api)), low temp, high temp, and sunset.
 
+You will *NEED* to get an API Key from [OpenWeatherMap](http://openweathermap.org) in order to successfully run this application
+
 ## Setup
 
 I'm using Raspbian -- you can use any distro, but YMMV.
 
+Pre-Req:
+
+0.a: Install Git for the Raspberry Pi
+```bash
+sudo apt-get install git
+```
+
 1. Install Ruby 2.2.2 on your Raspberry Pi. I used RVM, but you can do it however you want.
 
+1.a. Using RVM on your Raspberry PI
+```bash
+curl -L https://get.rvm.io | bash -s stable --ruby
+
+source ~/.rvm/scripts/rvm
+
+# Confirm everything was installed correctly
+type rvm | head -n 1
+
+# should read "rvm is a function"
+```
+
 2. Clone this repo or download the tarball and expand into your home directory on the Pi.
+```
+git clone https://github.com/hectorleiva/rpi-clock.git
+```
 
 3. Write a script in your home directory to start the app called "run_clock". This is mine:
+
+    (NOTE: There are a few additional steps required below in order to get it set-up on a Pi. This guide is overall incomplete - but it can help you get started at the moment)
 
     ```bash
     #!/bin/bash
 
     cd /home/pi/rpi-clock
-    GEM_PATH=/home/pi/.rvm/gems/ruby-2.2.2@rpi-clock:/home/pi/.rvm/gems/ruby-2.2.2@global /home/pi/.rvm/rubies/ruby-2.2.2/bin/ruby app.rb &
-    sleep 30
-    midori -e Fullscreen -a http://localhost:4567
-    ```
-
-    The `GEM_PATH` stuff and full path to ruby is because I used RVM. You might only need the `ruby app.rb &` part.
-
-    Notice that it sleeps for 30 seconds. This was me being generous because it takes several seconds for my Pi's wifi adapter to connect to the network.
-
-4. Make the script executable:
-
-    ```bash
+    GEM_PATH=/home/pi/.rvm/gems/ruby-2.2.2@rpi-clock:/home/pi/.rvm/gems/ruby-2.2.2@global 
+    /home/pi/.rvm/rubies/ruby-2.2.2/bin/ruby app.rb &
     chmod +x run_clock
     ```
 
