@@ -15,7 +15,7 @@ You will *NEED* to get an API Key from [OpenWeatherMap](http://openweathermap.or
 
 I'm using Raspbian -- you can use any distro, but YMMV.
 
-Pre-Req:
+### PreRequisites
 
 0.a: Install Git for the Raspberry Pi
 ```bash
@@ -37,7 +37,7 @@ type rvm | head -n 1
 ```
 
 2. Clone this repo or download the tarball and expand into your home directory on the Pi.
-```
+```bash
 git clone https://github.com/hectorleiva/rpi-clock.git
 ```
 
@@ -45,64 +45,95 @@ git clone https://github.com/hectorleiva/rpi-clock.git
 
     (NOTE: There are a few additional steps required below in order to get it set-up on a Pi. This guide is overall incomplete - but it can help you get started at the moment)
 
-    ```bash
-    #!/bin/bash
+```bash
+#!/bin/bash
 
-    cd /home/pi/rpi-clock
-    GEM_PATH=/home/pi/.rvm/gems/ruby-2.2.2@rpi-clock:/home/pi/.rvm/gems/ruby-2.2.2@global 
-    /home/pi/.rvm/rubies/ruby-2.2.2/bin/ruby app.rb &
-    chmod +x run_clock
-    ```
+cd /home/pi/rpi-clock
+GEM_PATH=/home/pi/.rvm/gems/ruby-2.7.1@rpi-clock:/home/pi/.rvm/gems/ruby-2.7.1@global 
+/home/pi/.rvm/rubies/ruby-2.7.1/bin/ruby app.rb &
+chmod +x run_clock
+```
+
+4. The following environment variables are required for the app to work:
+
+```bash
+export OPEN_WEATHER_API_KEY=
+```
+
+You must input either of these sets of environment variables:
+```bash
+export HOME_LAT=
+export HOME_LON=
+```
+
+OR
+
+```bash
+export HOME_ID=
+```
+
+These variables can be contained within a `.env` file as well can called like the following:
+
+```bash
+# .env
+OPEN_WEATHER_API_KEY=
+HOME_LAT=
+HOME_LON=
+```
+
+```bash
+export $(cat .env) && ruby app.rb
+```
 
 5. Run the script to make sure it works:
 
-    ```bash
-    ./run_clock
-    ```
+```bash
+./run_clock
+```
 
 6. Now create a desktop item that will automatically start the script:
 
-    ```bash
-    sudo vim /etc/xdg/autostart/clock.desktop
-    ```
+```bash
+sudo vim /etc/xdg/autostart/clock.desktop
+```
 
-    Put this in the file:
+Put this in the file:
 
-    ```
-    [Desktop Entry]
-    Name=Clock App
-    Exec=/home/pi/run_clock
-    Type=Application
-    Terminal=true
-    ```
+```bash
+[Desktop Entry]
+Name=Clock App
+Exec=/home/pi/run_clock
+Type=Application
+Terminal=true
+```
 
 7. Last, set the Pi to start with no desktop:
 
-    ```bash
-    sudo vim /etc/xdg/lxsession/LXDE/autostart
-    ```
+```bash
+sudo vim /etc/xdg/lxsession/LXDE/autostart
+```
 
-    **Comment out the stuff in that file** and then put this in the file:
+**Comment out the stuff in that file** and then put this in the file:
 
-    ```
-    @xset s off
-    @xset -dpms
-    @xset s noblank
-    ```
+```bash
+@xset s off
+@xset -dpms
+@xset s noblank
+```
 
 8. (Optional) Disable overscan and force HDMI output:
 
-    ```bash
-    sudo vim /boot/config.txt
-    ```
+```bash
+sudo vim /boot/config.txt
+```
 
-    Set the following options:
+Set the following options:
 
-    ```
-    disable_overscan=1
-    hdmi_force_hotplug=1
-    hdmi_drive=2
-    ```
+```bash
+disable_overscan=1
+hdmi_force_hotplug=1
+hdmi_drive=2
+```
 
 Boot the Pi and see if it works!
 
