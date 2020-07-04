@@ -1,0 +1,10 @@
+---
+version: '3.2'
+
+services:
+  app:
+    build: .
+    ports: 
+      - "4567:4567"
+    env_file:
+      - .env

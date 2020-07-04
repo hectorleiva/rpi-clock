@@ -1,20 +1,22 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    dotenv (2.5.0)
-    mini_portile2 (2.3.0)
-    mustermann (1.0.2)
-    nokogiri (1.8.2)
-      mini_portile2 (~> 2.3.0)
-    rack (2.0.4)
-    rack-protection (2.0.1)
+    dotenv (2.7.5)
+    mini_portile2 (2.4.0)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
+    nokogiri (1.10.9)
+      mini_portile2 (~> 2.4.0)
+    rack (2.2.3)
+    rack-protection (2.0.8.1)
       rack
-    sinatra (2.0.1)
+    ruby2_keywords (0.0.2)
+    sinatra (2.0.8.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.1)
+      rack-protection (= 2.0.8.1)
       tilt (~> 2.0)
-    tilt (2.0.8)
+    tilt (2.0.10)
 
 PLATFORMS
   ruby

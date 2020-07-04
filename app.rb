@@ -18,7 +18,7 @@ OPEN_WEATHER_API_KEY = ENV["OPEN_WEATHER_API_KEY"]
 UNITS = 'imperial'
 
 def generateBaseRequest(baseUrl)
-    if HOME_ID
+    if HOME_ID and not HOME_ID.strip.empty?
         return "#{baseUrl}?id=#{HOME_ID}"
     else
         return "#{baseUrl}?lat=#{HOME_LAT}&lon=#{HOME_LON}"
@@ -70,7 +70,10 @@ get '/' do
   @weather = JSON.parse(weather_json)
   @forecast = JSON.parse(forecast_json)
   logger.info(@forecast['list'].first['main'])
-  @sunrise = Time.at(@weather['sys']['sunrise'])
-  @sunset = Time.at(@weather['sys']['sunset'])
+
+  # @weather sunset/sunrise values are passed based on UTC timestamps
+  # @weather['timezone'] offsets (in seconds) against the sunset/sunrise values
+  @sunrise = Time.at(@weather['sys']['sunrise'] + @weather['timezone']).utc
+  @sunset = Time.at(@weather['sys']['sunset'] + @weather['timezone']).utc
   erb :home
 end
