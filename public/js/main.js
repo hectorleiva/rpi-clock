@@ -1,21 +1,41 @@
 var SECONDS = 1000;
 var MINUTES = 60 * SECONDS;
 
+function isCurrentHourInAM(currentHour) {
+  if (currentHour < 12) {
+    return true;
+  }
+  return false;
+}
+
+function convertTwentyFourHourTimeToTwelveHourTime(currentHour) {
+  if (currentHour === 0) {
+    return 12;
+  }
+
+  if (currentHour === 12) {
+    return 12;
+  }
+
+  if (currentHour < 12) {
+    return currentHour;
+  }
+
+  if (currentHour > 12) {
+    return currentHour - 12;
+  }
+}
+
 function updateClock() {
   var now = new Date();
   var hour = now.getHours();
-  var am = true;
 
-  if (hour > 12) {
-    hour -= 12;
-    am = false;
-  } else if (hour === 0) {
-    hour = 12;
-  }
+  var isAM = isCurrentHourInAM(hour);
+  var convertedHour = convertTwentyFourHourTimeToTwelveHourTime(hour);
 
   var minute = now.getMinutes();
   if (minute < 10) minute = '0' + minute;
-  $('#clock').html(hour + ':' + minute + (am ? 'am' : 'pm'));
+  $('#clock').html(convertedHour + ':' + minute + (isAM ? 'am' : 'pm'));
 }
 
 updateClock();
