@@ -73,7 +73,7 @@ get '/' do
 
   # @weather sunset/sunrise values are passed based on UTC timestamps
   # @weather['timezone'] offsets (in seconds) against the sunset/sunrise values
-  @sunrise = Time.at(@weather['sys']['sunrise'] + @weather['timezone']).utc
-  @sunset = Time.at(@weather['sys']['sunset'] + @weather['timezone']).utc
+  @sunrise = Time.at(@weather['sys']['sunrise'] + @weather['timezone'])
+  @sunset = Time.at(@weather['sys']['sunset'] + @weather['timezone'])
   erb :home
 end

@@ -42,7 +42,7 @@
     </div>
     <div class="col-md-4 centered mt-4">
       <div class="sun">
-        <% if Time.now > @sunset + (60 * 60) %>
+        <% if (Time.now.to_i + @weather['timezone']) > @sunset.to_i %>
           <i class="wi wi-sunrise"></i><br>
           <div class="sunrise-clock">
             <%= @sunrise.strftime('%I:%M%p').downcase %>
