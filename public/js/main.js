@@ -5,10 +5,14 @@ function updateClock() {
   var now = new Date();
   var hour = now.getHours();
   var am = true;
+
   if (hour > 12) {
     hour -= 12;
     am = false;
+  } else if (hour === 0) {
+    hour = 12;
   }
+
   var minute = now.getMinutes();
   if (minute < 10) minute = '0' + minute;
   $('#clock').html(hour + ':' + minute + (am ? 'am' : 'pm'));

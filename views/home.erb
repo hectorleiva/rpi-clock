@@ -4,7 +4,7 @@
       <div id="clock"></div>
     </div>
   </div>
-  <div class="row">
+  <div class="row align-items-center mt-3 mb-3">
     <div class="col-md-4 centered">
       <%
         conditions = @weather['weather'].first
@@ -29,7 +29,7 @@
       %>
       <i class="conditions wi <%= icon %>"></i>
     </div>
-    <div class="col-md-4 centered">
+    <div class="col-md-4 centered mt-4">
       <div class="current-temp">
         <i class="wi wi-thermometer"></i>
         <%= @weather['main']['temp'] %>&deg;
@@ -40,14 +40,18 @@
         <%= @forecast['list'].first['main']['temp_max'].round %>&deg;
       </div>
     </div>
-    <div class="col-md-4 centered">
+    <div class="col-md-4 centered mt-4">
       <div class="sun">
         <% if Time.now > @sunset + (60 * 60) %>
           <i class="wi wi-sunrise"></i><br>
-          <%= @sunrise.strftime('%I:%M%p').downcase %>
+          <div class="sunrise-clock">
+            <%= @sunrise.strftime('%I:%M%p').downcase %>
+          </div>
         <% else %>
           <i class="wi wi-sunset"></i><br>
-          <%= @sunset.strftime('%I:%M%p').downcase %>
+          <div class="sunset-clock">
+            <%= @sunset.strftime('%I:%M%p').downcase %>
+          </div>
         <% end %>
       </div>
     </div>
