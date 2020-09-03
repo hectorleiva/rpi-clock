@@ -43,4 +43,4 @@ jobs:
           docker buildx build \
           --platform ${{ steps.prepare.outputs.docker_platform }} \
           --tag ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }} \
-          --output=type=registry .
+          --output=type=registry,name=${DOCKER_REGISTRY}:443/${{ steps.prepare.outputs.docker_image }},push=true .
